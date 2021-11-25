@@ -30,6 +30,7 @@ import { documentFilterService } from './services/document-filter';
 import { redirectService } from './services/redirect-service';
 import { allowlist } from './allowlist';
 import { browserUtils } from '../utils/browser-utils';
+import { redirectsCache } from '../utils/redirects-cache';
 
 export const webRequestService = (function () {
     const onRequestBlockedChannel = utils.channels.newChannel();
@@ -276,10 +277,24 @@ export const webRequestService = (function () {
         // check if request rule is blocked by rule and is redirect rule
         } else if (requestRule && !requestRule.isAllowlist()) {
             if (requestRule.isOptionEnabled(TSUrlFilter.NetworkRuleOption.Redirect)) {
-                // eslint-disable-next-line max-len
-                const redirectUrl = redirectService.createRedirectUrl(requestRule.getAdvancedModifierValue());
-                if (redirectUrl) {
-                    return { redirectUrl };
+                // TODO: use randomly generated token
+                // passed to redirect by createRedirectFileUrl and returned back
+                const UNBLOCK_MARKER = '&__unblock=1';
+                if (requestUrl.includes(UNBLOCK_MARKER)) {
+                    // if redirect passed unblock param back,
+                    // add url to cache for no further redirecting on button click;
+                    // save origin url so unblock token parameter should be cut off
+                    redirectsCache.add(requestUrl.slice(0, -UNBLOCK_MARKER.length));
+                }
+
+                if (!redirectsCache.hasUrl(requestUrl)) {
+                    const redirectUrl = redirectService.createRedirectUrl(
+                        requestRule.getAdvancedModifierValue(),
+                        requestUrl,
+                    );
+                    if (redirectUrl) {
+                        return { redirectUrl };
+                    }
                 }
             }
         }

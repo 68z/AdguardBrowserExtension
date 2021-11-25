@@ -40,7 +40,7 @@ export const redirectService = (function () {
      * @param title
      * @return string|null
      */
-    const createRedirectUrl = (title) => {
+    const createRedirectUrl = (title, requestUrl) => {
         if (!title) {
             return null;
         }
@@ -51,7 +51,7 @@ export const redirectService = (function () {
             return null;
         }
 
-        return resources.createRedirectFileUrl(redirectSource.file);
+        return resources.createRedirectFileUrl(redirectSource.file, requestUrl);
     };
 
     const hasRedirect = (title) => {
