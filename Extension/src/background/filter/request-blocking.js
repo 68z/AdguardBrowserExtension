@@ -279,7 +279,7 @@ export const webRequestService = (function () {
             if (requestRule.isOptionEnabled(TSUrlFilter.NetworkRuleOption.Redirect)) {
                 // TODO: use randomly generated token
                 // passed to redirect by createRedirectFileUrl and returned back
-                const UNBLOCK_MARKER = '&__unblock=1';
+                const UNBLOCK_MARKER = '&__unblock=blabla';
                 if (requestUrl.includes(UNBLOCK_MARKER)) {
                     // if redirect passed unblock param back,
                     // add url to cache for no further redirecting on button click;
