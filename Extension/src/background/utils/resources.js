@@ -95,7 +95,7 @@ export const resources = (function () {
     const createRedirectFileUrl = (redirectFile, requestUrl) => {
         // TODO: generate random 'unblock_token' token
         // eslint-disable-next-line max-len
-        return browser.runtime.getURL(`${WEB_ACCESSIBLE_RESOURCES}/redirects/${redirectFile}${warSecret()}&__unblock=blabla&origin=${requestUrl}`);
+        return browser.runtime.getURL(`${WEB_ACCESSIBLE_RESOURCES}/redirects/${redirectFile}${warSecret()}&__unblock=blabla&__origin=${requestUrl}`);
     };
 
     // EXPOSE
